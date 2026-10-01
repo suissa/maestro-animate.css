@@ -5,7 +5,12 @@
   </picture>
 </p>
 
-![License MIT](https://shields.io) ![PRs Welcome](https://shields.io) ![TypeScript Ready](https://shields.io) ![Elm Supported](https://shields.io)
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript Ready">
+  <img src="https://img.shields.io/badge/Elm-Supported-60B5CC.svg" alt="Elm Supported">
+</p>
  
 
 ---
