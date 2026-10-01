@@ -1,6 +1,6 @@
-# motion-behaviors.css runtime
+# maestro-animate.css runtime
 
-A declarative behavior/orchestration layer for Animate.css.
+A declarative maestro (behavior/orchestration) layer for Animate.css.
 
 ```ts
 const animate = {
