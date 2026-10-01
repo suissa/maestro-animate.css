@@ -1,48 +1,97 @@
-# Animate.css
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bcf253f7-3b7f-4e23-a4b9-dfa7cba0f8dd">
+    <img alt="maestro-animate.css logo" src="https://github.com/user-attachments/assets/fd3b13a9-1cfd-4088-9a16-54e18af1b483" width="600">
+  </picture>
+</p>
 
-[![GitHub Version](https://img.shields.io/github/release/animate-css/animate.css.svg?style=for-the-badge)](https://github.com/animate-css/animate.css/releases) [![Github Star](https://img.shields.io/github/stars/animate-css/animate.css.svg?style=for-the-badge)](https://github.com/animate-css/animate.css/stargazers) [![Github Fork](https://img.shields.io/github/forks/animate-css/animate.css.svg?style=for-the-badge)](https://github.com/animate-css/animate.css/network/members) [![License](https://img.shields.io/badge/license-hippocratic%20license-orange.svg?longCache=true&style=for-the-badge)](https://github.com/animate-css/animate.css/blob/main/LICENSE)
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript Ready">
+  <img src="https://img.shields.io/badge/Elm-Supported-60B5CC.svg" alt="Elm Supported">
+</p>
+ 
 
-> If you need the old docs - v3.x.x and under - you can find it [here](https://github.com/animate-css/animate.css/tree/a8d92e585b1b302f7749809c3308d5e381f9cb17).
+---
 
-## _Just-add-water CSS animation_
+# maestro-animate.css runtime
 
-## Installation
+A declarative maestro (behavior/orchestration) layer for **Animate.css**. 
 
-Install with npm:
+The runtime focus is strictly orchestration. **Animate.css** remains fully responsible for the actual animation implementation.
 
-```shell
-npm install animate.css --save
+## ✨ Features
+
+- **Purely Declarative:** Manage complex animation timelines entirely through HTML attributes.
+- **Decoupled Architecture:** Separates animation behavior/triggers from styles.
+- **Cascading Animations:** Easily chain sequential animations without complex CSS delays.
+- **Polyglot Adapters:** Built-in support for Pure TypeScript, React, and Elm.
+
+## 🚀 How it works
+
+### 1. Define the Configuration Contract
+
+You map out the orchestration layer using a clean JavaScript/TypeScript configuration object:
+
+```ts
+const animate = {
+  in: "zoomInDown",
+  out: "zoomOutDown",
+  start: ["page-loaded"],
+  wait: "10s",
+  finish: "hidden",
+  lastFinish: "visible"
+}
 ```
 
-Install with yarn:
+### 2. Markup your HTML
 
-```shell
-yarn add animate.css
+Simply use the `data-behavior` and `data-motion` attributes. The runtime listener intercepts these elements and applies the orchestration hooks seamlessly.
+
+```html
+<img data-behavior="animate el-in el-out" src="logo1.png">
+<img data-behavior="animate el-in el-out" src="logo2.png">
+<input data-behavior="animate el-in el-out">
+<input type="submit" data-behavior="animate el-in last">
 ```
 
-## Getting Started
+---
 
-You can find the Animate.css documentation on the [website](https://animate.style/).
+## 🛠️ API Reference
 
-## Accessibility
+### Triggers
+Control exactly *when* an animation lifecycle starts:
+* `page-loaded` — Fires immediately when the DOM content is ready.
+* `click:#selector` — Triggers when the specified element is clicked.
+* `visible:#selector` — Triggers via IntersectionObserver when the target enters the viewport.
+* `event:Event.Name` — Listens to any native or custom browser event.
+* `after:#element-id` — Chains animations! Starts right after the specified element finishes its own cycle.
 
-Animate.css supports the [`prefers-reduced-motion` media query](https://webkit.org/blog/7551/responsive-design-for-motion/) so that users with motion sensitivity can opt out of animations. On supported platforms (currently all the majors browsers and OS), users can select "reduce motion" on their operating system preferences and it will turn off CSS transitions for them without any further work required.
+### Per-Element Attributes
+Customize orchestration constraints directly inside individual HTML nodes:
+* `data-motion-group` — Groups elements into a shared timeline state.
+* `data-motion-in` — Overrides the default entry animation class.
+* `data-motion-out` — Overrides the default exit animation class.
+* `data-motion-wait` — Injects a specific delay duration (e.g., `0.5s`).
+* `data-motion-finish` — Defines the end state visibility property (`visible`, `hidden`, `remove`).
 
-## Core Team
+### Lifecycle Events
+Hook into execution side-effects with native DOM events:
+`motion:start` • `motion:enter` • `motion:entered` • `motion:wait` • `motion:exit` • `motion:exited` • `motion:finish`
 
-| ![Daniel Eden](https://avatars2.githubusercontent.com/u/439365?s=460&u=512b4cc5324938ae40bbb8f3b7769d335953cd3a&v=4) | ![Elton Mesquita](https://avatars2.githubusercontent.com/u/5007208?s=460&u=418401ee605824272e5dcb955fd64ea24546a857&v=4) | ![Waren Gonzaga](https://avatars1.githubusercontent.com/u/15052701?s=460&u=9e58364978379536d3f26c4ce5cae1a2a449a0e4&v=4) |
-| --- | --- | --- |
-| [Daniel Eden](https://github.com/daneden) | [Elton Mesquita](https://github.com/eltonmesquita) | [Waren Gonzaga](https://github.com/WarenGonzaga) |
-| Animate.css Creator | Maintainer | Core Contributor |
+---
 
-## License
+## 🔌 Supported Adapters
 
-Animate.css is licensed under the [Hippocratic License](http://firstdonoharm.dev).
+The project architecture isolates side effects so you can map state cleanly anywhere:
 
-## Code of Conduct
+* **Pure TypeScript:** Driven directly inside `index.ts`.
+* **React:** Composed reactively via `react.tsx`.
+* **Elm:** Safe compiler-driven contracts inside `elm/src/MotionBehaviors.elm`.
 
-This project and everyone participating in it is governed by the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [animate@eltonmesquita.com](mailto:animate@eltonmesquita.com).
+> 💡 **The Elm Paradigm:** The Elm adapter emits the exact same declarative data contract securely using the type-system, while the TypeScript runtime handles the physical browser-side DOM mutations.
 
-## Contributing
+## 📄 License
 
-Pull requests are the way to go here. We only have two rules for submitting a pull request: match the naming convention (camelCase, categorised [fades, bounces, etc]) and let us see a demo of submitted animations in a [pen](https://codepen.io). That **last one is important**.
+This project is licensed under the MIT License.
