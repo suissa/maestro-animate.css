@@ -8,9 +8,9 @@
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
   <img src="https://img.shields.io/badge/TypeScript-Ready-blue.svg" alt="TypeScript Ready">
   <img src="https://img.shields.io/badge/Elm-Supported-60B5CC.svg" alt="Elm Supported">
-</p>---
+</p>
 
-maestro-animate.css
+<h1 style="opacity:0" >maestro-animate.css</h1>
 
 A declarative orchestration layer for Animate.css, powered by a single framework-agnostic runtime: UbiQ Maestro animate.css.
 
