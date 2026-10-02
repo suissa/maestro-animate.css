@@ -7,6 +7,20 @@ export const durationToMs=(value)=>{
   return Number(match[1])*(match[2]==="s"?1000:1);
 };
 const sleep=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+const nextFrame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+
+export const directionGap=(direction,element,reference)=>{
+  const elRect=element.getBoundingClientRect();
+  const referenceRect=reference.getBoundingClientRect();
+
+  switch(direction){
+    case "top": return elRect.top-referenceRect.top;
+    case "bottom": return referenceRect.bottom-elRect.bottom;
+    case "left": return elRect.left-referenceRect.left;
+    case "right": return referenceRect.right-elRect.right;
+    default: throw new Error(`Invalid motion direction: ${direction}`);
+  }
+};
 
 export class MotionBehaviors {
   constructor(config,root=document){
@@ -27,6 +41,7 @@ export class MotionBehaviors {
   }
   async runElement(element,index=0,total=1,group=element.dataset.motionGroup||"default"){
     if(this.started.has(element)) return;
+    await this.waitForStartWhen(element,index,group);
     this.started.add(element); this.dispatch("start",element,index,group);
     if(token(element,"el-in")){
       this.dispatch("enter",element,index,group);
@@ -44,6 +59,27 @@ export class MotionBehaviors {
     const finish=element.dataset.motionFinish||(isLast?this.config.lastFinish:this.config.finish)||(isLast?"visible":"hidden");
     this.applyFinish(element,finish); this.dispatch("finish",element,index,group);
     this.emit(`motion:finished:${element.id||index}`,{element,index,group});
+  }
+  async waitForStartWhen(element,index=0,group="default"){
+    const expression=element.dataset.motionStartWhen;
+    if(!expression) return;
+
+    const match=/^([a-z]+)-gap:(.+):([0-9]*\.?[0-9]+)$/.exec(expression.trim());
+    if(!match) throw new Error(`Invalid motion start condition: ${expression}`);
+
+    const [,direction,selector,minimumValue]=match;
+    const minimum=Number(minimumValue);
+    const reference=this.root.querySelector(selector.trim());
+
+    if(!reference) throw new Error(`Motion start condition reference not found: ${selector}`);
+
+    this.dispatch("start-wait",element,index,group);
+
+    while(directionGap(direction,element,reference)<minimum){
+      await nextFrame();
+    }
+
+    this.dispatch("start-ready",element,index,group);
   }
   reset(group){
     for(const el of this.elements(group)){
